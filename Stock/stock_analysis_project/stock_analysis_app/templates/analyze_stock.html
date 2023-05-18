@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stock Analysis</title>
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #333;
+      color: #9bfff3;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inconsolata', monospace;
+    }
+
+    .container {
+      padding: 20px;
+      text-align: center; /* Center align the content */
+    }
+    h1{
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase; /* Capitalize the heading */
+        background-color: #7e4d59;
+        font-size: 50px;
+
+    }
+    h2 {
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-transform: uppercase; /* Capitalize the heading */
+      background-color: #634F5F;
+    }
+
+    h3 {
+      margin-top: 30px;
+      text-align: center;
+      text-transform: uppercase; /* Capitalize the heading */
+      text-decoration: underline; /* Add underline to heading */
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #862325;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    form {
+      margin-top: 20px;
+      text-align: center; /* Center align the form */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      text-transform: uppercase; /* Capitalize the label */
+    }
+
+    input[type="text"],
+    input[type="date"],
+    button[type="submit"],
+    .clear-history-btn {
+      width: 200px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box; /* Adjust the input box size */
+      text-align: center; /* Center align the input and buttons */
+    }
+
+    button[type="submit"],
+    .clear-history-btn {
+      background-color: #2980b9;
+      color: #fff;
+      cursor: pointer;
+      padding: 5px 10px; /* Add padding to the button */
+    }
+
+    .clear-history-btn {
+      text-decoration: none; /* Remove the underline */
+    }
+
+    ul {
+      margin-top: 20px;
+      list-style-type: none;
+      text-align: center; /* Center align the list items */
+    }
+
+    ul li {
+      margin-bottom: 10px;
+    }
+
+    img {
+      display: block;
+      margin: 20px auto; /* Center align the images */
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+  </div>
+
+  <div class="container">
+    <h1>STOCK ANALYZER</h1>
+    <form method="post" action="{% url 'analysis' %}">
+      {% csrf_token %}
+      <label for="stock_symbol">Stock Symbol:</label>
+      <input type="text" id="stock_symbol" name="stock_symbol" required>
+      <br><br>
+      <label for="start_date">Start Date:</label>
+      <input type="date" id="start_date" name="start_date" required>
+      <br><br>
+      <label for="end_date">End Date:</label>
+      <input type="date" id="end_date" name="end_date" required>
+      <br><br>
+      <button type="submit">Search</button>
+    </form><hr>
+
+    <h2>History</h2>
+    {% if search_history %}
+      <ul>
+        {% for item in search_history %}
+          <li>{{ item.stock_symbol }} - {{ item.created_at|date:"Y-m-d" }} ({{ item.start_date }} to {{ item.end_date }})</li>
+        {% endfor %}
+      </ul><br>
+      <div style="margin-top: 10px;">
+        <a href="{% url 'analysis' %}?clear_history=1" class="clear-history-btn">Clear</a>
+      </div>
+    {% else %}
+      <p>No search history available.</p>
+    {% endif %}<br><hr>
+
+    {% if stock_info %}
+      <h2>Stock Information</h2>
+      <p>Company Name: {{ stock_info.longName }}</p>
+      <p>Sector: {{ stock_info.sector }}</p>
+      <p>Industry: {{ stock_info.industry }}</p>
+      <p>Market Cap: {{ stock_info.marketCap }}</p>
+      <!-- Display other desired stock information -->
+    {% endif %}<br><hr>
+
+    {% if company_description %}
+      <h2>Company Description</h2>
+      <p>{{ company_description }}</p>
+    {% endif %}<br><hr>
+
+    <!-- Analysis Results -->
+    {% if image_files %}
+      <h2>Graphs</h2>
+      {% for image in image_files %}
+        <img src="data:image/png;base64,{{ image }}" alt="Stock Analysis">
+      {% endfor %}
+    {% endif %}
+  </div>
+</body>
+</html>

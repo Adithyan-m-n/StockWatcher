@@ -1,0 +1,74 @@
+<!-- Content of login.html -->
+<h2>Login</h2>
+<form method="POST" action="{% url 'login' %}">
+  {% csrf_token %}
+  {% if error %}
+  <p>{{ error }}</p>
+  {% endif %}
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" required>
+  <br>
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required>
+  <br>
+  <button type="submit">Login</button>
+</form>
+<style>
+    
+    .login-form {
+            margin: 0 auto;
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-form h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .login-form label {
+            color: #fff;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .login-form button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2980b9;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .login-form {
+                width: 90%;
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-form {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+</style>
